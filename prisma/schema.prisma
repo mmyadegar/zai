@@ -1,0 +1,38 @@
+// Prisma schema for Instagram Auto-Responder MVP
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Auto-reply rule: keyword -> response
+model Rule {
+  id        String   @id @default(cuid())
+  keyword   String   @unique
+  response  String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Log of every received message and the auto-reply that was sent
+model MessageLog {
+  id         String   @id @default(cuid())
+  sender     String
+  content    String
+  response   String
+  matchedRule String? // null if no rule matched (default reply used)
+  source     String   @default("simulate") // "simulate" | "webhook"
+  createdAt  DateTime @default(now())
+}
+
+// Key-value store for settings (default reply, welcome message, etc.)
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

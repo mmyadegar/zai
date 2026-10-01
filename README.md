@@ -1,11 +1,120 @@
-# zai-website
+# 🤖 دستیار اینستاگرام — پاسخگوی خودکار دایرکت
 
-Repository managed collaboratively by **mmyadegar** and **Super Z** (AI assistant).
+سیستم پاسخگوی خودکار برای ادمین‌های اینستاگرام. این نسخه یک **MVP (حداقل محصول قابل‌استفاده)** است که برای تست مفهوم ساخته شده.
 
-## Status
-🚧 Initial setup in progress
+## ✨ امکانات
 
-## Workflow
-- Code is edited directly in this repository
-- Commits are pushed to `main` branch
-- Each commit message describes what was changed
+- 📋 **مدیریت قوانین**: تعریف کلمه کلیدی + پاسخ خودکار
+- ⚡ **شبیه‌ساز پیام**: تست سیستم با پیام‌های نمونه
+- 📝 **پاسخ پیش‌فرض**: پیامی که وقتی هیچ کلمه کلیدی تطابق نداشت ارسال می‌شه
+- 📊 **داشبورد**: آمار قوانین و پیام‌ها
+- 📜 **لاگ پیام‌ها**: تاریخچه کامل پیام‌های ورودی و پاسخ‌های ارسالی
+
+## 🛠 تکنولوژی‌ها
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4 + shadcn/ui
+- **Database**: Prisma ORM + SQLite
+- **Font**: Vazirmatn (پشتیبانی فارسی RTL)
+
+## 🚀 راه‌اندازی محلی
+
+### پیش‌نیازها
+- Node.js 18+ یا Bun
+- npm/bun package manager
+
+### مراحل
+
+1. **کلون کردن ریپو:**
+   ```bash
+   git clone https://github.com/mmyadegar/zai.git
+   cd zai
+   ```
+
+2. **نصب وابستگی‌ها:**
+   ```bash
+   bun install
+   # یا
+   npm install
+   ```
+
+3. **تنظیم متغیرهای محیطی:**
+   ```bash
+   cp .env.example .env
+   # محتوای .env باید این باشه:
+   # DATABASE_URL="file:./db/custom.db"
+   ```
+
+4. **ایجاد دیتابیس:**
+   ```bash
+   bun run db:push
+   # یا
+   npx prisma db push
+   ```
+
+5. **اجرای سرور توسعه:**
+   ```bash
+   bun run dev
+   # یا
+   npm run dev
+   ```
+
+6. مرورگر رو روی `http://localhost:3000` باز کنید.
+
+## 📁 ساختار پروژه
+
+```
+.
+├── prisma/
+│   └── schema.prisma          # مدل‌های دیتابیس (Rule, MessageLog, Setting)
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx         # layout اصلی با فونت Vazirmatn و RTL
+│   │   ├── page.tsx           # صفحه اصلی با 4 تب
+│   │   ├── globals.css
+│   │   └── api/
+│   │       ├── rules/         # CRUD قوانین
+│   │       ├── simulate/      # شبیه‌ساز پیام
+│   │       ├── logs/          # لاگ پیام‌ها
+│   │       ├── settings/      # تنظیمات (پاسخ پیش‌فرض)
+│   │       └── stats/         # آمار داشبورد
+│   ├── components/ui/         # کامپوننت‌های shadcn/ui
+│   ├── hooks/                 # React hooks
+│   └── lib/
+│       ├── db.ts              # Prisma client
+│       ├── matcher.ts         # منطق تطبیق کلمات کلیدی
+│       └── utils.ts
+└── package.json
+```
+
+## 🎯 نحوه کار
+
+1. در تب **قوانین**، کلمات کلیدی و پاسخ‌های مربوطه رو تعریف کنید.
+   - مثال: کلمه `قیمت` → پاسخ `برای اطلاع از قیمت‌ها به لینک زیر مراجعه کنید: ...`
+2. در تب **شبیه‌ساز**، یه پیام نمونه بفرستید تا ببینید چه پاسخی ارسال می‌شه.
+3. در تب **لاگ‌ها**، تاریخچه پیام‌ها رو ببینید.
+4. در تب **داشبورد**، آمار کلی رو ببینید.
+
+## 🔮 توسعه‌های آینده
+
+- [ ] اتصال واقعی به Instagram Graph API
+- [ ] پشتیبانی از پاسخ‌های چندمرحله‌ای (flow)
+- [ ] دسته‌بندی قوانین
+- [ ] آمار پیشرفته با نمودار
+- [ ] احراز هویت ادمین
+- [ ] پشتیبانی از رسانه (عکس، ویدیو)
+
+## ⚠️ نکته مهم
+
+این نسخه فعلاً به اینستاگرام وصل **نیست** — پیام‌ها به‌صورت شبیه‌سازی‌شده پردازش می‌شن. برای اتصال واقعی به اینستاگرام باید:
+1. یک Instagram Business Account داشته باشید
+2. یک Facebook App در Meta Developers بسازید
+3. Instagram Graph API و Webhook رو راه‌اندازی کنید
+4. توکن دسترسی به پیج رو دریافت کنید
+
+سپس می‌تونید endpoint `/api/simulate` رو به `/api/webhook` تغییر بدید و منطق یکسانی رو برای پیام‌های واقعی استفاده کنید.
+
+## 📝 لایسنس
+
+MIT
